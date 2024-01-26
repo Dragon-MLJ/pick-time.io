@@ -13,7 +13,7 @@ function usePickResult(nanoid: string) {
   async function refresh() {
     NProgress.start();
     try {
-      const res = await fetch(`/api/events/${nanoid}/pick`);
+      const res = await fetch(`/picktime/api/events/${nanoid}/pick`);
       const json = await res.json() as { name: string, picks: string[] }[];
       setResult(json.map(v => ({
         ...v,
