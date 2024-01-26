@@ -42,19 +42,9 @@ function Footer() {
             简体中文
           </Link>
         </div>
-        <div className="flex-grow">
-          <p className="opacity-30 mb-4">Other Links</p>
-          <a href="https://github.com/yuaanlin/pick-time.io">GitHub</a>
-        </div>
+        
       </div>
-      <a
-        href="https://zeabur.com?referralCode=yuaanlin&utm_source=pick-time.io"
-      >
-        <img
-          src="https://zeabur.com/deployed-on-zeabur-dark.svg"
-          alt="Deployed on Zeabur"
-        />
-      </a>
+      
     </div>
   </div>
   ;
