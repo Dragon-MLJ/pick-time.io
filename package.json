@@ -12,7 +12,6 @@
     "@types/bcrypt": "^5.0.0",
     "@types/jsonwebtoken": "^8.5.8",
     "@types/nprogress": "^0.2.0",
-    "@upstash/ratelimit": "^0.4.4",
     "@upstash/redis": "^1.10.2",
     "bcrypt": "^5.0.1",
     "classnames": "^2.3.1",
