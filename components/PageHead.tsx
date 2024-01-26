@@ -27,7 +27,7 @@ function PageHead(props: Props) {
       content={description || t('default_website_description')}/>
     <meta name="twitter:card" content="summary_large_image"/>
     <meta name="og:image" content={imageUrl || '/og.png'}/>
-    <meta name="og:url" content={url || 'https://pick-time.io/'}/>
+    <meta name="og:url" content={url || ''}/>
   </Head>;
 }
 
