@@ -1,25 +1,25 @@
-import { TimeRange } from '@models/time';
-import { DateValue } from '@models/date';
-import TwoColumnTimePicker from '@components/TwoColumnTimePicker';
-import Footer from '@components/Footer';
-import TopNav from '@components/TopNav';
-import PageHead from '@components/PageHead';
-import PageContainer from '@components/PageContainer';
-import DatePicker from '@components/DatePicker';
-import { useState } from 'react';
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useRouter } from 'next/router';
-import NProgress from 'nprogress';
-import cx from 'classnames';
-import type { NextPage } from 'next';
+import { TimeRange } from "@models/time";
+import { DateValue } from "@models/date";
+import TwoColumnTimePicker from "@components/TwoColumnTimePicker";
+// import Footer from '@components/Footer';
+import TopNav from "@components/TopNav";
+import LanguageSelector from "@components/LanguageSelector";
+import PageHead from "@components/PageHead";
+import PageContainer from "@components/PageContainer";
+import DatePicker from "@components/DatePicker";
+import { useState } from "react";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useRouter } from "next/router";
+import NProgress from "nprogress";
+import cx from "classnames";
+import type { NextPage } from "next";
 
 const Home: NextPage = () => {
-
   const { t } = useTranslation();
   const router = useRouter();
 
-  const [title, setTitle] = useState('');
+  const [title, setTitle] = useState("");
   const [selectedTime, setSelectedTime] = useState<TimeRange[]>([]);
   const [selectedDate, setSelectedDate] = useState<DateValue[]>([]);
   const [isCreating, setIsCreating] = useState(false);
@@ -31,22 +31,25 @@ const Home: NextPage = () => {
   async function submit() {
 
     if (!title) {
-      document.getElementById('title-input')
-        ?.scrollIntoView({ behavior: 'smooth' });
+      document
+        .getElementById("title-input")
+        ?.scrollIntoView({ behavior: "smooth" });
       setIsMissingTitle(true);
       return;
     }
 
     if (selectedDate.length === 0) {
-      document.getElementById('date-input')
-        ?.scrollIntoView({ behavior: 'smooth' });
+      document
+        .getElementById("date-input")
+        ?.scrollIntoView({ behavior: "smooth" });
       setIsMissingDate(true);
       return;
     }
 
     if (selectedTime.length === 0) {
-      document.getElementById('time-input')
-        ?.scrollIntoView({ behavior: 'smooth' });
+      document
+        .getElementById("date-input")
+        ?.scrollIntoView({ behavior: "smooth" });
       setIsMissingTime(true);
       return;
     }
@@ -54,17 +57,24 @@ const Home: NextPage = () => {
     setIsCreating(true);
     NProgress.start();
     try {
-      const res = await fetch('/api/event', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/event", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           title,
-          availableDates: selectedDate.map(d => d.toString()),
-          availableTimes: selectedTime.map(t => t.toString())
+          availableDates: selectedDate.map((d) => d.toString()),
+          availableTimes: selectedTime.map((t) => t.toString()),
         }),
       });
-      const data = await res.json();
-      await router.push('/created/' + data.nanoid);
+      setResponseStatus(res.status);
+      // Check if the response status code is 200
+      if (res.status === 200 || res.status === 201) {
+        const data = await res.json();
+        await router.push("/created/" + data.nanoid);
+      } else {
+        setIsCreating(false);
+        NProgress.done();
+      }
     } catch (err) {
       console.error(err);
     } finally {
@@ -72,80 +82,101 @@ const Home: NextPage = () => {
       NProgress.done();
     }
   }
-
+  const [responseStatus, setResponseStatus] = useState<number | null>(null);
   return (
     <div>
-      <PageHead/>
-      <TopNav/>
+      <PageHead />
+      <TopNav />
+      <LanguageSelector />
       <PageContainer>
         <div className="mt-8">
-          <p
-            className="text-2xl mb-4 font-bold"
-            id="title-input">
-            {t('create_event_name_input_label')}
+          <p className="text-2xl mb-4 font-bold" id="title-input">
+            {t("create_event_name_input_label")}
           </p>
           <input
             value={title}
-            onChange={e => {
+            onChange={(e) => {
               setTitle(e.target.value);
               e.target.value.length > 0 && setIsMissingTitle(false);
             }}
-            className={cx('rounded-xl text-lg px-2 py-1',
+            className={cx(
+              "rounded-xl text-lg px-2 py-1",
               isMissingTitle
-                ? 'border-amber-500 border-4'
-                : 'border border-black')}
+                ? "border-amber-500 border-4"
+                : "border border-black"
+            )}
           />
         </div>
 
         <div className="mt-16" id="date-input">
           <div className="mb-12">
             <p className="text-2xl font-bold">
-              {t('create_event_date_input_label')}
+              {t("create_event_date_input_label")}
             </p>
-            {isMissingDate && <p className="text-amber-500">
-              {t('create_event_date_input_error')}
-            </p>}
+           {isMissingDate && (
+              <p className="text-amber-500">
+                {t("create_event_date_input_error")}
+              </p>
+            )}
           </div>
           <DatePicker
             value={selectedDate}
-            onChange={v => {
+             onChange={(v) => {
               setSelectedDate(v);
               v.length > 0 && setIsMissingDate(false);
-            }}/>
+            }}
+          />
         </div>
 
         <div className="mt-16" id="time-input">
           <div className="mb-12">
             <p className="text-2xl font-bold">
-              {t('create_event_time_input_label')}
+              {t("create_event_time_input_label")}
             </p>
-            {isMissingTime && <p className="text-amber-500">
-              {t('create_event_time_input_error')}
-            </p>}
+            {isMissingTime && (
+              <p className="text-amber-500">
+                {t("create_event_time_input_error")}
+              </p>
+            )}
           </div>
         </div>
         <TwoColumnTimePicker
           value={selectedTime}
-          onChange={v => {
+          onChange={(v) => {
             setSelectedTime(v);
             v.length > 0 && setIsMissingTime(false);
-          }}/>
+          }}
+        />
         <button
           disabled={isCreating}
           onClick={submit}
           className="fixed bottom-8 right-8 bg-zinc-300 items-center
-        px-4 py-2 rounded-lg flex z-50 shadow-lg">
-          <p>{isCreating ? 'Wait ...' : t('create_event_submit_label')}</p>
-          <img src="/arrow.svg" alt="" className="ml-4 h-3"/>
+        px-4 py-2 rounded-lg flex z-50 shadow-lg"
+        >
+          <p>
+            {isCreating
+              ? "Wait ..."
+              : responseStatus === 429
+              ? t("rate_limit")
+              : responseStatus === 400
+              ? t("bad_request")
+              : responseStatus === 405
+              ? t("method_not_allowed")
+              : responseStatus === 500
+              ? t("server_internal_error")
+              : t("create_event_submit_label")}
+          </p>
+          <img src="/picktime/arrow.svg" alt="" className="ml-4 h-3" />
         </button>
       </PageContainer>
       <Footer/>
+      {/* <Footer/> */}
     </div>
   );
 };
 
 export async function getStaticProps({ locale }: any) {
-  return { props: { ...(await serverSideTranslations(locale, ['common'])) } };
+  return { props: { ...(await serverSideTranslations(locale, ["common"])) } };
 }
 
 export default Home;
