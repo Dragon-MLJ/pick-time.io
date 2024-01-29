@@ -169,7 +169,6 @@ const Home: NextPage = () => {
           <img src="/picktime/arrow.svg" alt="" className="ml-4 h-3" />
         </button>
       </PageContainer>
-      <Footer/>
       {/* <Footer/> */}
     </div>
   );
