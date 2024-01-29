@@ -4,6 +4,19 @@ import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
 import { customAlphabet } from 'nanoid';
 import RedisClient from '@utils/getRedis';
 import { ErrorCode } from '@models/errors';
+import { Ratelimit } from "@upstash/ratelimit";
+import { Redis } from "@upstash/redis";
+
+const redis = new Redis({
+  url: process.env.UPSTASH_REDIS_REST_URL || "",
+  token: process.env.UPSTASH_REDIS_REST_TOKEN || "",
+})
+
+const ratelimit = new Ratelimit({
+  redis: redis,
+  limiter: Ratelimit.fixedWindow(20, "12 h"),
+  analytics: false,
+});
 
 const handler: NextApiHandler = (req, res) => {
   switch (req.method) {
@@ -16,6 +29,10 @@ const handler: NextApiHandler = (req, res) => {
 };
 
 async function handleCreateEvent(req: NextApiRequest, res: NextApiResponse) {
+  const ipIdentifier = req.headers['x-real-cdn-ip'] ?? req.headers['x-real-ip'];
+  const { success } = await ratelimit.limit(
+    `picktime_limit_ip:${ipIdentifier}`
+  )
   try {
     const nanoid = customAlphabet('abcdefghijklmnopqrstuvwxyz', 6);
     const title: string = req.body.title;
