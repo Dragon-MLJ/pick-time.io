@@ -4,7 +4,9 @@ import { SerializedEventResult } from '@models/Pick';
 
 class RedisClient {
   private _redis: Redis;
-
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  private readonly Expires = 365 * 24 * 60 * 60; // 1 year in seconds
+  
   constructor() {
     const {
       UPSTASH_REDIS_REST_URL,
