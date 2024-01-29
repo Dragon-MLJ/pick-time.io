@@ -39,7 +39,7 @@ export default function (props: Props) {
            border-black rounded-xl px-2 py-1">
           <a
             className="flex-grow pr-4"
-            href={'https://pick-time.io/' + (router.locale === 'en-US'
+            href={'https://pick.mlj-dragon.cn/' + (router.locale === 'zh-CN'
               ? '' : (router.locale + '/')) + event.nanoid}
             target="_blank"
             rel="noopener noreferrer"
@@ -48,7 +48,7 @@ export default function (props: Props) {
               id="event-link"
               readOnly
               className="w-full"
-              value={'https://pick-time.io/' + (router.locale === 'en-US'
+              value={'https://pick.mlj-dragon.cn/' + (router.locale === 'zh-CN'
                 ? '' : (router.locale + '/')) + event.nanoid}
             />
           </a>
