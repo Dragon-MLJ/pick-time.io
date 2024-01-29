@@ -113,6 +113,9 @@
     ```
 
   1. Enjoy `picktime` at http://localhost:3000
+ 
+  此提示为分叉出来的我加的：注意添加环境变量UPSTASH_REDIS_REST_URL和UPSTASH_REDIS_REST_TOKEN
+  如果有时间我会写个教程怎么使用这个数据库
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
