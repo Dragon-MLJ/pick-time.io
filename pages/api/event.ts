@@ -36,6 +36,12 @@ async function handleCreateEvent(req: NextApiRequest, res: NextApiResponse) {
   try {
     const nanoid = customAlphabet('abcdefghijklmnopqrstuvwxyz', 6);
     const title: string = req.body.title;
+    
+     if (!success) {
+      res.status(429).json({ error: 'ratelimit' });
+      return;
+    }
+
     if (!title) {
       res.status(400).json({ error: ErrorCode.INVALID_REQUEST });
       return;
