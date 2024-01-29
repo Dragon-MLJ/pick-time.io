@@ -2,7 +2,7 @@
   "available_dates_label": "可选择的日期",
   "available_member_ratio_label": "位成员可以参加",
   "available_time_label": "可选择的时间",
-  "copy_successful": "连结复制成功!",
+  "copy_successful": "链接复制成功!",
   "create_event_date_input_error": "请至少选择一个日期。",
   "create_event_date_input_label": "哪些日期是可以选择的？",
   "create_event_name_input_label": "你的活动叫什么名字？",
@@ -55,5 +55,10 @@
   "username_label": "你的名称",
   "username_missing": "请输入你的名称。",
   "welcome": "欢迎",
-  "your_availability_label": "你有空的时间"
+  "your_availability_label": "你有空的时间",
+  "unknown_error": "未知错误",
+  "server_internal_error": "服务器错误",
+  "method_not_allowed": "请求方法不允许",
+  "bad_request": "错误请求",
+  "rate_limit": "达到速率限制"
 }
