@@ -55,5 +55,10 @@
   "username_label": "Name",
   "username_missing": "Please enter your name.",
   "welcome": "Welcome",
-  "your_availability_label": "Your Availability"
+  "your_availability_label": "Your Availability",
+  "unknown_error": "Unknown error",
+  "server_internal_error": "Server internal error",
+  "method_not_allowed": "Method not allowed",
+  "bad_request": "Bad request",
+  "rate_limit": "Rate limit"
 }
