@@ -3,12 +3,36 @@ import bcrypt from 'bcrypt';
 import jsonwebtoken from 'jsonwebtoken';
 import RedisClient from '@utils/getRedis';
 import { ErrorCode } from '@models/errors';
+import { Ratelimit } from "@upstash/ratelimit";
+import { Redis } from "@upstash/redis";
+
+const redis = new Redis({
+  url: process.env.UPSTASH_REDIS_REST_URL || "",
+  token: process.env.UPSTASH_REDIS_REST_TOKEN || "",
+})
+
+const ratelimit = new Ratelimit({
+  redis: redis,
+  limiter: Ratelimit.fixedWindow(10, "12 h"),
+  analytics: false,
+});
 
 const signIn: NextApiHandler = async (req, res) => {
   const {
     name,
     password
   } = req.body;
+
+  const ipIdentifier = req.headers['x-real-cdn-ip'] ?? req.headers['x-real-ip'];
+  const { success } = await ratelimit.limit(
+    `picktime_signin_limit_ip:${ipIdentifier}`
+  )
+
+  if (!success) {
+    res.status(429).json({ error: 'ratelimit' });
+    return;
+  }
+
 
   if (!process.env.JWT_SECRET) {
     res.status(500).json({ error: ErrorCode.INTERNAL_ERROR });
