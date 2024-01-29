@@ -55,5 +55,10 @@
   "username_label": "你的名稱",
   "username_missing": "請輸入你的名稱。",
   "welcome": "歡迎",
-  "your_availability_label": "你有空的時間"
+  "your_availability_label": "你有空的時間",
+  "unknown_error": "未知錯誤",
+  "server_internal_error": "伺服器錯誤",
+  "method_not_allowed": "請求方法不允許",
+  "bad_request": "錯誤請求",
+  "rate_limit": "達到速率限制"
 }
