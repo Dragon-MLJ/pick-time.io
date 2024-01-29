@@ -4,7 +4,7 @@ export default function Document() {
   return (
     <Html>
       <Head>
-        <link rel="icon" href="https://cdn.jsdelivr.net/gh/Dragon-MLJ/Dragon-MLJ-Figure-bed/img/favicon.ico" />
+        <link rel="icon" href="https://unpkg.com/dragon-mlj-bed/img/favicon.ico" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
          <link
           rel="preconnect"
