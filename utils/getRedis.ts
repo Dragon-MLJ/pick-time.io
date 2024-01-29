@@ -19,9 +19,13 @@ class RedisClient {
       token: UPSTASH_REDIS_REST_TOKEN,
     });
   }
+  private setWithExpiration(key: string, value: any) {
+    return this._redis.set(key, value, { ex: this.Expires });
+  }
 
   public setEvent(data: SerializedEventData) {
-    return this._redis.set(`event:${data.nanoid}`, data);
+    const key = `event:${data.nanoid}`;
+    return this.setWithExpiration(key, data);
   }
 
   public getEvent(nanoid: string) {
@@ -29,10 +33,9 @@ class RedisClient {
   }
 
   public setUser(nanoid: string, name: string, passwordHash?: string) {
-    return this._redis.set(`event:${nanoid}:user:${name}`, {
-      name,
-      passwordHash,
-    });
+    const key = `event:${nanoid}:user:${name}`;
+    const value = { name, passwordHash };
+    return this.setWithExpiration(key, value);
   }
 
   public getUser(nanoid: string, name: string): Promise<{
@@ -42,7 +45,8 @@ class RedisClient {
   }
 
   public setPicks(nanoid: string, picks: SerializedEventResult[]) {
-    return this._redis.set(`events:${nanoid}:picks`, picks);
+    const key = `events:${nanoid}:picks`;
+    return this.setWithExpiration(key, picks);
   }
 
   public getPicks(nanoid: string): Promise<SerializedEventResult[] | null> {
