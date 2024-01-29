@@ -3,10 +3,32 @@ import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
 import jsonwebtoken from 'jsonwebtoken';
 import RedisClient from '@utils/getRedis';
 import { ErrorCode } from '@models/errors';
+import { Ratelimit } from "@upstash/ratelimit";
+import { Redis } from "@upstash/redis";
+
+const redis = new Redis({
+  url: process.env.UPSTASH_REDIS_REST_URL || "",
+  token: process.env.UPSTASH_REDIS_REST_TOKEN || "",
+})
+
+const ratelimit = new Ratelimit({
+  redis: redis,
+  limiter: Ratelimit.fixedWindow(50, "12 h"),
+  analytics: false,
+});
 
 const pick: NextApiHandler = async (req, res) => {
+  const ipIdentifier = req.headers['x-real-cdn-ip'] ?? req.headers['x-real-ip'];
+  const { success } = await ratelimit.limit(
+    `picktime_pick_limit_ip:${ipIdentifier}`
+  )
+
   switch (req.method) {
     case 'POST':
+      if (!success) {
+        res.status(429).json({ error: 'RateLimit' });
+        return;
+      }
       return handleCreatePick(req, res);
     case 'GET':
       return handleGetPicks(req, res);
